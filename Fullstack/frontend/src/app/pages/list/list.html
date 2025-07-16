@@ -1,0 +1,294 @@
+<div class="games-container">
+  <div class="games-header">
+    <h1>Listado con Todos los Juegos</h1>
+    <p>Explora y filtra tu colección completa de videojuegos en detalle</p>
+  </div>
+
+  <div class="filters-section">
+    <div class="search-bar">
+      <svg class="search-icon" viewBox="0 0 24 24" fill="currentColor">
+        <path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
+      </svg>
+      <input 
+        type="text" 
+        placeholder="Buscar juegos..." 
+        [(ngModel)]="searchTerm"
+        (input)="onSearch()"
+        class="search-input">
+    </div>
+
+    <div class="filter-controls">
+      <select [(ngModel)]="selectedPlatform" (change)="onFilterChange()" class="filter-select">
+        <option *ngFor="let platform of platforms" [value]="platform">{{ platform }}</option>
+      </select>
+
+      <select [(ngModel)]="selectedGenre" (change)="onFilterChange()" class="filter-select">
+        <option *ngFor="let genre of genres" [value]="genre">{{ genre }}</option>
+      </select>
+
+      <select [(ngModel)]="selectedStatus" (change)="onFilterChange()" class="filter-select">
+        <option value="Todos los estados">Todos los estados</option>
+        <option value="Completado">Completado</option>
+        <option value="No completado">No completado</option>
+      </select>
+
+      <div class="view-toggle">
+        <button 
+          [class.active]="viewMode === 'grid'"
+          (click)="toggleViewMode('grid')"
+          class="view-btn">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-grid2x2-icon lucide-grid-2x2"><path d="M12 3v18"/><path d="M3 12h18"/><rect x="3" y="3" width="18" height="18" rx="2"/></svg>
+          Grid
+        </button>
+        <button 
+          [class.active]="viewMode === 'table'"
+          (click)="toggleViewMode('table')"
+          class="view-btn">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-rows3-icon lucide-rows-3"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M21 9H3"/><path d="M21 15H3"/></svg>
+          Tabla
+        </button>
+      </div>
+    </div>
+
+    <div class="results-info">
+      <span>{{ filteredGames.length }} de {{ games.length }} juegos</span>
+      <button (click)="clearFilters()" class="clear-filters-btn">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-funnel-x-icon lucide-funnel-x"><path d="M12.531 3H3a1 1 0 0 0-.742 1.67l7.225 7.989A2 2 0 0 1 10 14v6a1 1 0 0 0 .553.895l2 1A1 1 0 0 0 14 21v-7a2 2 0 0 1 .517-1.341l.427-.473"/><path d="m16.5 3.5 5 5"/><path d="m21.5 3.5-5 5"/></svg>
+        Limpiar filtros
+      </button>
+    </div>
+  </div>
+
+  <div class="add-game-section">
+      <button (click)="toggleAddForm()" class="add-game-btn">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-badge-plus-icon lucide-badge-plus"><path d="M3.85 8.62a4 4 0 0 1 4.78-4.77 4 4 0 0 1 6.74 0 4 4 0 0 1 4.78 4.78 4 4 0 0 1 0 6.74 4 4 0 0 1-4.77 4.78 4 4 0 0 1-6.75 0 4 4 0 0 1-4.78-4.77 4 4 0 0 1 0-6.76Z"/><line x1="12" x2="12" y1="8" y2="16"/><line x1="8" x2="16" y1="12" y2="12"/></svg>
+        Agregar Juego
+      </button>
+    </div>
+
+    <div *ngIf="showAddForm" class="add-form">
+      <h3>{{ editingGame ? 'Editar Juego' : 'Agregar Nuevo Juego' }}</h3>
+      <form (ngSubmit)="onSubmitGame()" class="game-form">
+      <div class="form-group">
+        <label for="genero">Género</label>
+        <select 
+          type="text"
+          id="genero" 
+          [(ngModel)]="newGame.genero" 
+          name="genero" 
+          required 
+          class="form-input">
+          <option value="">Seleccione</option>
+          <option *ngFor="let g of generosValidos" [value]="g">{{ g }}</option>
+        </select>
+      </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="nombre">Nombre del Juego</label>
+            <input 
+              type="text" 
+              id="nombre" 
+              [(ngModel)]="newGame.nombre" 
+              name="nombre"
+              required
+              class="form-input">
+          </div>
+          <div class="form-group">
+            <label for="plataforma">Plataforma</label>
+            <select 
+              id="plataforma" 
+              [(ngModel)]="newGame.plataforma" 
+              name="plataforma" 
+              required 
+              class="form-input">
+              <option value="">Seleccione</option>
+              <option *ngFor="let p of plataformasValidas" [value]="p">{{ p }}</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="anno">Anno</label>
+            <input 
+              type="number" 
+              id="anno" 
+              [(ngModel)]="newGame.anno" 
+              name="anno"
+              min="1970"
+              max="2030"
+              required
+              class="form-input">
+          </div>
+          <div class="form-group">
+            <label for="puntaje">Puntaje</label>
+            <select 
+              id="puntaje" 
+              [(ngModel)]="newGame.puntaje" 
+              name="puntaje" 
+              required 
+              class="form-input">
+              <option value="">Seleccione</option>
+              <option *ngFor="let p of puntajesValidos" [value]="p">{{ p }}</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="horas">Horas Jugadas</label>
+            <input 
+              type="number" 
+              id="horas" 
+              [(ngModel)]="newGame.horas" 
+              name="horas"
+              min="0"
+              required
+              class="form-input">
+          </div>
+          <div class="form-group checkbox-group">
+            <label class="checkbox-label">
+              <input 
+                type="checkbox" 
+                [(ngModel)]="newGame.completado" 
+                name="completado"
+                class="form-checkbox">
+              <span class="checkmark"></span>
+              Juego Completado
+            </label>
+          </div>
+        </div>
+
+        <div class="form-actions">
+          <button type="button" (click)="cancelAdd()" class="btn-cancel">Cancelar</button>
+          <button type="submit" [disabled]="!isValidGame()" class="btn-submit">Hecho</button>
+        </div>
+      </form>
+    </div>
+
+  <div class="games-content" [class.table-view]="viewMode === 'table'">
+    <div *ngIf="viewMode === 'grid'" class="games-grid">
+      <div *ngFor="let game of filteredGames" class="game-card">
+        <div 
+          class="game-status-check" 
+          *ngIf="game.completado.toLowerCase() === 'si'; else incompletoIcon" 
+          title="Completado">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-check-circle">
+            <path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="10"/>
+          </svg>
+        </div>
+
+      <ng-template #incompletoIcon>
+        <div class="game-status-check" title="No completado">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#F59E0B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-clock-icon lucide-clock">
+            <path d="M12 6v6l4 2"/><circle cx="12" cy="12" r="10"/>
+          </svg>
+        </div>
+      </ng-template>
+      
+        <h3 class="game-title">{{ game.nombre }}</h3>
+        
+        <div class="game-info">
+          <div class="info-item">
+            <span class="info-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-computer-icon lucide-computer"><rect width="14" height="8" x="5" y="2" rx="2"/><rect width="20" height="8" x="2" y="14" rx="2"/><path d="M6 18h2"/><path d="M12 18h6"/></svg>
+            </span>
+            <span class="info-text">{{ game.plataforma }}</span>
+          </div>
+          
+          <div class="info-item">
+            <span class="info-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-calendar-icon lucide-calendar"><path d="M8 2v4"/><path d="M16 2v4"/><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18"/></svg>
+            </span>
+            <span class="info-text">{{ game.anno }}</span>
+          </div>
+          
+          <div class="info-item">
+            <span class="info-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-star-icon lucide-star"><path d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z"/></svg>
+            </span>
+            <span class="info-text">{{ game.puntaje }}</span>
+          </div>
+          
+          <div class="info-item">
+            <span class="info-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-clock-icon lucide-clock"><path d="M12 6v6l4 2"/><circle cx="12" cy="12" r="10"/></svg>
+            </span>
+            <span class="info-text">{{ game.horas }} horas</span>
+          </div>
+        </div>
+        
+        <div class="game-footer">
+          <span class="genre-tag">{{ game.genero }}</span>
+          <div class="card-actions">
+          <button class="edit-btn" (click)="onEditGame(game)">
+            <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-pencil-icon lucide-pencil"><path d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z"/><path d="m15 5 4 4"/></svg>
+          </button>
+          <button class="delete-btn" (click)="onDeleteGame(game)"><svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-trash2-icon lucide-trash-2"><path d="M10 11v6"/><path d="M14 11v6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/><path d="M3 6h18"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg></button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <div *ngIf="viewMode === 'table'" class="games-table">
+      <table>
+        <thead>
+          <tr>
+            <th>Estado</th>
+            <th>Nombre</th>
+            <th>Plataforma</th>
+            <th>Año</th>
+            <th>Puntaje</th>
+            <th>Horas</th>
+            <th>Género</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let game of filteredGames">
+            <td>
+              <ng-container *ngIf="game.completado.toLowerCase() === 'si'; else noCompletado">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-check-circle">
+                  <path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="10"/>
+                </svg>
+              </ng-container>
+              <ng-template #noCompletado>
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#F59E0B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-clock">
+                  <path d="M12 6v6l4 2"/><circle cx="12" cy="12" r="10"/>
+                </svg>
+              </ng-template>
+            </td>
+            <td class="game-name">{{ game.nombre }}</td>
+            <td>{{ game.plataforma }}</td>
+            <td>{{ game.anno }}</td>
+            <td>{{ game.puntaje }}</td>
+            <td>{{ game.horas }}h</td>
+            <td>
+              <span class="genre-tag">{{ game.genero }}</span>
+           <td class="card-actions">
+              <button class="edit-btn" (click)="onEditGame(game)" title="Editar">
+                <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-pencil-icon lucide-pencil">
+                  <path d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z"/>
+                  <path d="m15 5 4 4"/>
+                </svg>
+              </button>
+              <button class="delete-btn" (click)="onDeleteGame(game)" title="Borrar">
+                <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-trash2-icon lucide-trash-2">
+                  <path d="M10 11v6"/><path d="M14 11v6"/>
+                  <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/>
+                  <path d="M3 6h18"/>
+                  <path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+                </svg>
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div *ngIf="filteredGames.length === 0" class="no-results">
+    <p>No se encontraron juegos que coincidan con los filtros seleccionados.</p>
+  </div>
+</div>
