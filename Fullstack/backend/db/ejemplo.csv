@@ -1,0 +1,69 @@
+nombre,plataforma,genero,anno,puntaje,completado,horas
+Call of Duty 2,PS2,FPS,2013,B,SI,10
+Bioshock Infinite,PC,FPS,2018,S,SI,32
+STALKER 1,PC,FPS,2018,A+,SI,25
+Metro 2033,PC,FPS,2018,A,SI,9
+Wolfenstein (2009),PC,FPS,2019,B,SI,8
+Crash Guerra de cocomaniacos,PS2,TPS,2011,B,NO,10
+State of Decay ,X360,TPS,2017,B,SI,20
+Mafia 2,X360,TPS,2017,A,SI,"13,6"
+Max Payne,MBL,TPS,2019,A,SI,7
+Uncharted 4,PS4,TPS,2019,B,SI,15
+Ori 1,PC,Metroidvania,2021,A,SI,14
+Ori 2,PC,Metroidvania,2021,A+,SI,"16,29"
+Cuphead,PC,Metroidvania,2022,A,NO,"9,5"
+Hollow Knight,PC,Metroidvania,2022,A,NO,"19,9"
+Pokemon Azul,MBL,JRPS,2015,B,NO,10
+Pokemon Verde Hoja,MBL,JRPS,2015,B,NO,10 
+Final Fantasy VII Remake,PS4,JRPS,2021,A,SI,14
+Hard West,PC,JRPS,2021,B,NO,12
+This War of Mine,MBL,Estrategia,2017,B,NO,10
+Party Hard,PC,Estrategia,2019,B,SI,5
+Cities Skylines,PC,Estrategia,2019,A+,NO,99
+Party Hard 2,PC,Estrategia,2020,B,SI,"6,7"
+Victoria 2,PC,Estrategia,2020,B,NO,68
+Anno 1800,PC,Estrategia,2021,A+,SI,130
+Crash TR original,PS1,Deportivo,2007,C,NO,10
+PES 16,X360,Deportivo,2016,B,NO,10
+FIFA Wolrd Cup 14,X360,Deportivo,2016,B,NO,10
+FIFA 15,X360,Deportivo,2016,A,NO,10
+Forza Horizon 2,X360,Deportivo,2017,A+,SI,10
+PES 17 ,X360,Deportivo,2017,B,NO,10
+Bioshock ,PC,Inmersive Sims,2018,S,SI,36
+Hitman,PC,Inmersive Sims,2021,A+,SI,11
+System Shock 2,PC,Inmersive Sims,2021,S,SI,10
+Dishonored,PC,Inmersive Sims,2021,A+,SI,"11,2"
+Prey (2017),PC,Inmersive Sims,2021,S,SI,"27,5"
+GTA:SA,PS2,Sandbox,2007,A+,SI,35
+Simpsons Hit & Run,PS2,Sandbox,2008,B,SI,20
+GTA:LCS,PS2,Sandbox,2008,C,SI,64
+GTA:IV,X360,Sandbox,2015,S,SI,150
+GTA:V,X360,Sandbox,2016,A+,SI,100
+Resident Evil 2,MBL,Horror,2017,A,SI,8
+Resident Evil CV,MBL,Horror,2017,A+,SI,12
+Resident Evil 3,MBL,Horror,2017,A,SI,9
+Resident Evil 5,PC,Horror,2019,B,SI,14
+Resident Evil 1,PC,Horror,2021,A+,NO,"2,8"
+Resident Evil 4,PC,Horror,2021,A,SI,"7,9"
+Train Sim World 2,PC,Simulacion,2021,A,NO,10
+Bus Simulator 18,PC,Simulacion,2021,B,NO,10
+American Truck Sim.,PC,Simulacion,2022,A+,NO,"17,1"
+Snowrunner,PC,Simulacion,2022,A,NO,35
+The Sims 3,PC,Simulacion,2022,A,NO,10
+Train Sim World 3,PC,Simulacion,2022,B,NO,"11,1"
+Car Mechanic Simulator 2021,PC,Simulacion,2024,A,NO,45
+Automation,PC,Simulacion,2025,A,NO,10
+Real Steel,X360,Cooperativo,2015,B,NO,10
+Army Of Two,X360,Cooperativo,2018,B,SI,10
+Dead By Daylight,PC,Cooperativo,2020,B,NO,150
+Left 4 Dead,PC,Cooperativo,2020,A,SI,15
+Left 4 Dead 2,PC,Cooperativo,2020,A+,SI,20
+Remanent from the Ashes,PS4,Cooperativo,2021,B,NO,2
+Twelve Minutes,PC,Otros,2023,A,SI,4
+Ghostrunner,PC,Otros,2024,B,SI,7
+God of War,PC,Otros,2024,A,SI,8
+God of War II,PC,Otros,2024,A,SI,11
+The Wolf Amoung Us,PC,Otros,2024,A+,SI,8
+Outerwilds,PC,Otros,2024,B,SI,15
+Dredge,PC,Otros,2024,A,SI,7
+The Forgotten City,PC,Otros,2024,A,SI,"7,5"
