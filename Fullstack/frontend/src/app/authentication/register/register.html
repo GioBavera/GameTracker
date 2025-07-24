@@ -1,0 +1,66 @@
+<div class="dashboard-container">
+  <div class="dashboard-header">
+    <h1>Crear cuenta</h1>
+    <p>Registrate con tu nombre, correo y contraseña para comenzar.</p>
+  </div>
+
+  <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="login-form">
+    <div class="form-group">
+      <label for="nombre" class="input-label">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-user-pen-icon lucide-user-pen"><path d="M11.5 15H7a4 4 0 0 0-4 4v2"/><path d="M21.378 16.626a1 1 0 0 0-3.004-3.004l-4.01 4.012a2 2 0 0 0-.506.854l-.837 2.87a.5.5 0 0 0 .62.62l2.87-.837a2 2 0 0 0 .854-.506z"/><circle cx="10" cy="7" r="4"/></svg>
+        Nombre completo
+      </label>
+      <input
+        id="nombre"
+        type="text"
+        formControlName="nombre"
+        placeholder="Tu nombre"
+      />
+    </div>
+
+    <div class="form-group">
+      <label for="email" class="input-label">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" stroke="currentColor"
+             stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
+          <path d="m22 7-8.991 5.727a2 2 0 0 1-2.009 0L2 7"/>
+          <rect x="2" y="4" width="20" height="16" rx="2"/>
+        </svg>
+        Correo electrónico
+      </label>
+      <input
+        id="email"
+        type="email"
+        formControlName="email"
+        placeholder="email@ejemplo.com"
+      />
+    </div>
+
+    <div class="form-group">
+      <label for="password" class="input-label">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" stroke="currentColor"
+             stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
+          <path d="M2.586 17.414A2 2 0 0 0 2 18.828V21a1 1 0 0 0 1 1h3a1 1 0 0 0 1-1v-1a1 1 0 0 1 1-1h1a1 1 0 0 0 1-1v-1a1 1 0 0 1 1-1h.172a2 2 0 0 0 1.414-.586l.814-.814a6.5 6.5 0 1 0-4-4z"/>
+          <circle cx="16.5" cy="7.5" r=".5" fill="currentColor"/>
+        </svg>
+        Contraseña
+      </label>
+      <input
+        id="password"
+        type="password"
+        formControlName="password"
+        placeholder="Contraseña (mínimo 6 caracteres)"
+      />
+    </div>
+
+    <button type="submit" class="login-button">Registrarse</button>
+
+    <p class="register-text">
+      ¿Ya tienes una cuenta?
+      <a href="/login" class="register-link">Inicia sesión</a>
+    </p>
+
+    <div *ngIf="registerError" class="error-message">
+      {{ registerError }}
+    </div>
+  </form>
+</div>

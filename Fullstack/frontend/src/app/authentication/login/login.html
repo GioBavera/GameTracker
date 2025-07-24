@@ -1,0 +1,49 @@
+<div class="dashboard-container">
+    <div class="dashboard-header">
+      <h1>Iniciar sesión</h1>
+      <p>Accede con tu correo y contraseña para continuar.</p>
+    </div>
+
+    <form (ngSubmit)="login()" class="login-form">
+      <div class="form-group">
+        <label for="email" class="input-label">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
+            <path d="m22 7-8.991 5.727a2 2 0 0 1-2.009 0L2 7"/>
+            <rect x="2" y="4" width="20" height="16" rx="2"/>
+          </svg>
+          Correo electrónico
+        </label>
+        <input
+          id="email"
+          type="email"
+          [(ngModel)]="email"
+          name="email"
+          required
+          placeholder="email@ejemplo.com"
+        />
+      </div>
+
+      <div class="form-group">
+        <label for="password" class="input-label">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
+            <path d="M2.586 17.414A2 2 0 0 0 2 18.828V21a1 1 0 0 0 1 1h3a1 1 0 0 0 1-1v-1a1 1 0 0 1 1-1h1a1 1 0 0 0 1-1v-1a1 1 0 0 1 1-1h.172a2 2 0 0 0 1.414-.586l.814-.814a6.5 6.5 0 1 0-4-4z"/>
+            <circle cx="16.5" cy="7.5" r=".5" fill="currentColor"/>
+          </svg>
+          Contraseña
+        </label>
+        <input
+          id="password"
+          type="password"
+          [(ngModel)]="password"
+          name="password"
+          required
+          placeholder="Contraseña"
+        />
+      </div>
+      <button type="submit" class="login-button">Ingresar</button>
+      <p class="register-text">
+        ¿No tienes una cuenta?
+        <a href="/register" class="register-link">Regístrate aquí</a>
+      </p>
+    </form>
+  </div>

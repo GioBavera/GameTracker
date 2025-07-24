@@ -6,7 +6,7 @@
     .top-nav {
       background: white;
       border-bottom: 1px solid #E5E7EB;
-      padding: 1rem 12rem;
+      padding: 1rem 3rem;
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -90,3 +90,18 @@
         min-width: 120px;
       }
     }
+
+.nav-logout-box .nav-link {
+  background-color: #D0E8FF; 
+  color: #0064c9; 
+  padding: 6px 12px;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.nav-logout-box .nav-link:hover {
+  background-color: #A8D0FF; 
+}
+    

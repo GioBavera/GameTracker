@@ -126,46 +126,54 @@ export class List implements OnInit {
 
 //------------------- CRUD
   onSubmitGame(): void {
-    if (!this.isValidGame()) return;
+  if (!this.isValidGame()) return;
 
+  const juegoBase = {
+    nombre: String(this.newGame.nombre).trim(),
+    plataforma: String(this.newGame.plataforma).trim(),
+    anno: Number(this.newGame.anno),
+    puntaje: String(this.newGame.puntaje).trim(),
+    completado: this.newGame.completado ? 'SI' : 'NO',
+    horas: Number(this.newGame.horas),
+    genero: this.newGame.genero
+  };
+
+  if (this.editingGame) {
+    // Modo Edición
     const juegoActualizado = {
-      id: this.editingGame!.id, 
-      nombre: String(this.newGame.nombre).trim(),
-      plataforma: String(this.newGame.plataforma).trim(),
-      anno: Number(this.newGame.anno),
-      puntaje: String(this.newGame.puntaje).trim(),
-      completado: this.newGame.completado ? 'SI' : 'NO',
-      horas: Number(this.newGame.horas),
-      genero: this.newGame.genero
+      ...juegoBase,
+      id: this.editingGame.id
     };
 
-    // Modo Edicion 
-    if (this.editingGame) {
-      this.gameService.updateJuego(juegoActualizado).subscribe({
-        next: updated => {
-          // Reemplazar en el array original
-          const index = this.games.findIndex(g => g.id === updated.id);
-          if (index !== -1) this.games[index] = updated;
+    this.gameService.updateJuego(juegoActualizado).subscribe({
+      next: updated => {
+        const index = this.games.findIndex(g => g.id === updated.id);
+        if (index !== -1) this.games[index] = updated;
 
-          this.applyFilters();
-          this.resetForm();
-          this.showAddForm = false;
-          this.editingGame = null;
-        },
-        error: err => console.error('Error al editar juego:', err)
-      });
-    } else {    // Modo Agregar
-      this.gameService.addJuego(juegoActualizado).subscribe({
-        next: added => {
-          this.games.push(added);
-          this.applyFilters();
-          this.resetForm();
-          this.showAddForm = false;
-        },
-        error: err => console.error('Error al agregar juego:', err)
-      });
-    }
+        this.applyFilters();
+        this.resetForm();
+        this.showAddForm = false;
+        this.cdr.detectChanges();
+        this.editingGame = null;
+      },
+      error: err => console.error('Error al editar juego:', err)
+    });
+  } else {
+    // Modo Agregar
+    this.gameService.addJuego(juegoBase).subscribe({
+      next: added => {
+        this.games.push(added);
+        this.applyFilters();
+        this.resetForm();
+        this.showAddForm = false;
+        this.cdr.detectChanges();
+
+      },
+      error: err => console.error('Error al agregar juego:', err)
+    });
   }
+}
+
 
   isValidGame(): boolean {
     return this.newGame.nombre.trim() !== '' &&

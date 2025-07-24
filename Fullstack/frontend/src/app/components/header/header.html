@@ -18,4 +18,11 @@
       Por Género
     </button>
   </div>
+  
+   <div *ngIf="showLogout" class="nav-logout-box">
+      <button (click)="logout()" class="nav-link" style="display:flex; align-items:center; gap:6px; background-color:#D0E8FF; color:#0064c9; padding:6px 12px; border-radius:6px; border:none; cursor:pointer; transition:background-color 0.3s ease;">
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-log-out-icon lucide-log-out"><path d="m16 17 5-5-5-5"/><path d="M21 12H9"/><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/></svg>
+      Logout
+    </button>
+  </div>
 </nav>
