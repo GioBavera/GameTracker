@@ -111,4 +111,27 @@ public class JuegoService {
         return new GraficoPlataformas(labels, data);
     }
 
+    public GraficoPlataformas obtenerChartDataPorCampoYGenero(String campoAgrupacion, String generoFiltro) {
+        if (!campoAgrupacion.equals("anno") && !campoAgrupacion.equals("plataforma")) {
+            throw new IllegalArgumentException("Campo de agrupación inválido: " + campoAgrupacion);
+        }
+
+        String jpql = "SELECT j." + campoAgrupacion + ", COUNT(j) FROM Juego j WHERE j.genero = :genero GROUP BY j." + campoAgrupacion + " ORDER BY j." + campoAgrupacion;
+
+        List<Object[]> resultados = entityManager.createQuery(jpql, Object[].class)
+                .setParameter("genero", generoFiltro)
+                .getResultList();
+
+        List<String> labels = new ArrayList<>();
+        List<Long> data = new ArrayList<>();
+
+        for (Object[] row : resultados) {
+            labels.add(String.valueOf(row[0])); // Convierte cualquier tipo a String (Integer, String, etc.)
+            data.add(((Number) row[1]).longValue());
+        }
+
+        return new GraficoPlataformas(labels, data);
+    }
+
+
 }

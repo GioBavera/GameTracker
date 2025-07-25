@@ -13,7 +13,17 @@ public class GraficosController {
     private JuegoService juegoService;
 
     @GetMapping("/{campo}")
-    public GraficoPlataformas getChartData(@PathVariable String campo) {
-        return juegoService.obtenerChartDataAgrupadoPor(campo);
+    public GraficoPlataformas getChartData(
+            @PathVariable String campo,
+            @RequestParam(required = false) String genero) {
+
+        if (genero != null) {
+            return juegoService.obtenerChartDataPorCampoYGenero(campo, genero);
+        } else {
+            return juegoService.obtenerChartDataAgrupadoPor(campo);
+        }
     }
+
+
+
 }

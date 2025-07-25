@@ -41,4 +41,12 @@ export class Service {
   getChartDataPorCampo(campo: string): Observable<Grafico> {
     return this.http.get<Grafico>(`http://localhost:8080/api/graficos/${campo}`);
   }
+
+  getChartDataPorCampoYGenero(campo: string, genero: string): Observable<Grafico> {
+  const url = `http://localhost:8080/api/graficos/${campo}?genero=${encodeURIComponent(genero)}`;
+  return this.http.get<Grafico>(url);
+}
+
+
+  
 }

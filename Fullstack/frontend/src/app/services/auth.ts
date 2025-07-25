@@ -23,7 +23,7 @@ export class AuthService {
     return this.httpClient.post<any>(this.LOGIN_URL, {email, password}).pipe(
       tap(response => {
         if(response.token){
-          console.log(response.token);
+          //console.log(response.token);
           this.setToken(response.token);
           this.setRefreshToken(response.refreshToken)
           this.autoRefreshToken();
