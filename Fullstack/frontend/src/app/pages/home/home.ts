@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { Chart, registerables } from 'chart.js';
 import { Service } from '../../services/service';
 import { estadisticasGenerales } from '../../model/stasTotal';
+import { AuthService } from '../../services/auth';
 
 Chart.register(...registerables);
 
@@ -27,12 +28,14 @@ export class Home implements OnInit, OnDestroy {
 
   private charts: { [id: string]: Chart } = {};
   statsCargadas = false;
+  username: string | null = null;
 
-  constructor(private gameService: Service, private cdRef: ChangeDetectorRef) {}
+  constructor(private gameService: Service, private cdRef: ChangeDetectorRef, private authService : AuthService) {}
 
   ngOnInit(): void {
     this.gameService.getGameStats().subscribe({
       next: data => {
+        this.username = this.authService.getUsername();
         this.stats = data;
         this.statsCargadas = true;
         this.cdRef.detectChanges();
@@ -72,7 +75,7 @@ export class Home implements OnInit, OnDestroy {
             data: chartData.data,
             backgroundColor: colores,
             ...(tipo === 'bar' && { borderRadius: 10 }),
-            ...(tipo === 'pie' && { borderWidth: 1, borderColor: '#fff' })
+            ...(tipo === 'pie' && { borderWidth: 0, borderColor: '#fff' })
           }]
         },
         options: {

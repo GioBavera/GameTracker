@@ -3,47 +3,60 @@ package com.registro.gametracker.service;
 import com.registro.gametracker.models.EstadisticasJuego;
 import com.registro.gametracker.models.GraficoPlataformas;
 import com.registro.gametracker.models.Juego;
+import com.registro.gametracker.models.User;
 import com.registro.gametracker.repository.JuegoRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.nio.file.AccessDeniedException;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
 public class JuegoService {
 
-    private final JuegoRepository juegoRepository;
-
     @PersistenceContext
     private EntityManager entityManager;
 
-    public JuegoService(JuegoRepository juegoRepository) {
+    private final JuegoRepository juegoRepository;
+    private final UsuarioAutenticadoService usuarioAutenticadoService;
+
+    public JuegoService(JuegoRepository juegoRepository, UsuarioAutenticadoService usuarioAutenticadoService) {
         this.juegoRepository = juegoRepository;
+        this.usuarioAutenticadoService = usuarioAutenticadoService;
     }
 
-    public List<Juego> obtenerTodos() {
-        return juegoRepository.findAll();
+    public List<Juego> obtenerDelUsuarioActual() {
+        User user = usuarioAutenticadoService.getUsuarioActual();
+        return juegoRepository.findByUser(user);
     }
 
-    public Optional<Juego> obtenerPorId(Long id) {
-        return juegoRepository.findById(id);
+    public Optional<Juego> obtenerPorIdDelUsuario(Long id) {
+        User user = usuarioAutenticadoService.getUsuarioActual();
+        return juegoRepository.findByIdAndUser(id, user);
     }
 
-    public Juego guardar(Juego juego) {
+    public Juego guardarParaUsuario(Juego juego) {
+        User user = usuarioAutenticadoService.getUsuarioActual();
+        juego.setUser(user);
         return juegoRepository.save(juego);
     }
 
-    public void eliminar(Long id) {
-        juegoRepository.deleteById(id);
+    public void eliminarSiEsDelUsuario(Long id) throws AccessDeniedException {
+        User user = usuarioAutenticadoService.getUsuarioActual();
+        Juego juego = juegoRepository.findById(id).orElseThrow();
+
+        if (!juego.getUser().equals(user)) {
+            throw new AccessDeniedException("No puedes eliminar este juego.");
+        }
+
+        juegoRepository.delete(juego);
     }
 
     public EstadisticasJuego calcularEstadisticasPorGenero(String genero) {
-        List<Juego> juegos = juegoRepository.findAll().stream()
+        User user = usuarioAutenticadoService.getUsuarioActual();
+        List<Juego> juegos = juegoRepository.findByUser(user).stream()
                 .filter(j -> genero.equalsIgnoreCase(j.getGenero()))
                 .toList();
 
@@ -97,41 +110,44 @@ public class JuegoService {
     }
 
     public GraficoPlataformas obtenerChartDataAgrupadoPor(String campo) {
-        String jpql = "SELECT j." + campo + ", COUNT(j) FROM Juego j GROUP BY j." + campo + " ORDER BY j." + campo;
-        List<Object[]> resultados = entityManager.createQuery(jpql, Object[].class).getResultList();
+        User user = usuarioAutenticadoService.getUsuarioActual();
+        List<Juego> juegos = juegoRepository.findByUser(user);
 
-        List<String> labels = new ArrayList<>();
-        List<Long> data = new ArrayList<>();
+        Map<String, Long> agrupado = juegos.stream()
+                .collect(Collectors.groupingBy(j -> {
+                    switch (campo) {
+                        case "anno": return j.getAnno();
+                        case "plataforma": return j.getPlataforma();
+                        case "puntaje": return j.getPuntaje();
+                        case "genero": return j.getGenero();
+                        default: throw new IllegalArgumentException("Campo no soportado: " + campo);
+                    }
+                }, Collectors.counting()));
 
-        for (Object[] row : resultados) {
-            labels.add((String) row[0]);
-            data.add(((Number) row[1]).longValue());
-        }
+        List<String> labels = new ArrayList<>(agrupado.keySet());
+        List<Long> data = labels.stream().map(agrupado::get).toList();
 
         return new GraficoPlataformas(labels, data);
     }
 
     public GraficoPlataformas obtenerChartDataPorCampoYGenero(String campoAgrupacion, String generoFiltro) {
-        if (!campoAgrupacion.equals("anno") && !campoAgrupacion.equals("plataforma")) {
-            throw new IllegalArgumentException("Campo de agrupación inválido: " + campoAgrupacion);
-        }
+        User user = usuarioAutenticadoService.getUsuarioActual();
+        List<Juego> juegos = juegoRepository.findByUser(user).stream()
+                .filter(j -> generoFiltro.equalsIgnoreCase(j.getGenero()))
+                .toList();
 
-        String jpql = "SELECT j." + campoAgrupacion + ", COUNT(j) FROM Juego j WHERE j.genero = :genero GROUP BY j." + campoAgrupacion + " ORDER BY j." + campoAgrupacion;
+        Map<String, Long> agrupado = juegos.stream()
+                .collect(Collectors.groupingBy(j -> {
+                    switch (campoAgrupacion) {
+                        case "anno": return j.getAnno();
+                        case "plataforma": return j.getPlataforma();
+                        default: throw new IllegalArgumentException("Campo no soportado: " + campoAgrupacion);
+                    }
+                }, Collectors.counting()));
 
-        List<Object[]> resultados = entityManager.createQuery(jpql, Object[].class)
-                .setParameter("genero", generoFiltro)
-                .getResultList();
-
-        List<String> labels = new ArrayList<>();
-        List<Long> data = new ArrayList<>();
-
-        for (Object[] row : resultados) {
-            labels.add(String.valueOf(row[0])); // Convierte cualquier tipo a String (Integer, String, etc.)
-            data.add(((Number) row[1]).longValue());
-        }
+        List<String> labels = new ArrayList<>(agrupado.keySet());
+        List<Long> data = labels.stream().map(agrupado::get).toList();
 
         return new GraficoPlataformas(labels, data);
     }
-
-
 }

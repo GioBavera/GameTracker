@@ -20,11 +20,7 @@ export class App implements OnInit {
 
   ngOnInit(): void {
     if (isPlatformBrowser(this.platformId)) {
-      //console.log('Token:', localStorage.getItem('authToken'));
-
       const auth = this.authService.isAuthenticated();
-      //console.log('¿Autenticado al iniciar App?', auth);
-
       if (auth) {
         this.authService.autoRefreshToken();
       }

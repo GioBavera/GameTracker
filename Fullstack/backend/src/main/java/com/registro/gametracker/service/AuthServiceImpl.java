@@ -14,9 +14,12 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class AuthServiceImpl implements AuthService{
 
+    // Guarda o buscar usuarios en la base de datos
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    // Servicio que genera tokens JWT
     private final JwtService jwtService;
+    // Se encarga de autentificar los usuarios
     private final AuthenticationManager authenticationManager;
 
     @Override
@@ -26,10 +29,9 @@ public class AuthServiceImpl implements AuthService{
                 .email(request.getEmail())
                 .password(passwordEncoder.encode(request.getPassword()))
                 .build();
-        userRepository.save(user);
-        var jwtToken = jwtService.generateToken(user);
-        return AuthResponse.builder()
-                .token(jwtToken).build();
+        userRepository.save(user);  // Guarda el usuario en la base
+        var jwtToken = jwtService.generateToken(user);  // Crea el JWT
+        return AuthResponse.builder().token(jwtToken).build();  // Devuelve el token
     }
 
     @Override

@@ -34,19 +34,20 @@ export class Service {
     return this.http.put<Juego>(`http://localhost:8080/api/juegos/${juego.id}`, juego);
   }
 
+  // Devuelve las estadisticas de /home
   getGameStats(): Observable<estadisticasGenerales> {
     return this.http.get<estadisticasGenerales>('http://localhost:8080/api/estadisticas/generales');
   }
 
+  // Devuelve valores para los graficos de /home
   getChartDataPorCampo(campo: string): Observable<Grafico> {
     return this.http.get<Grafico>(`http://localhost:8080/api/graficos/${campo}`);
   }
 
+  // Devuelve valores para los graficos de /genre
   getChartDataPorCampoYGenero(campo: string, genero: string): Observable<Grafico> {
-  const url = `http://localhost:8080/api/graficos/${campo}?genero=${encodeURIComponent(genero)}`;
-  return this.http.get<Grafico>(url);
-}
-
-
+    const url = `http://localhost:8080/api/graficos/${campo}?genero=${encodeURIComponent(genero)}`;
+    return this.http.get<Grafico>(url);
+  }
   
 }
