@@ -1,9 +1,10 @@
 package com.registro.gametracker.service;
 
-import com.registro.gametracker.models.EstadisticasGenerales;
-import com.registro.gametracker.models.Juego;
-import com.registro.gametracker.models.User;
+import com.registro.gametracker.models.dto.juego.EstadisticasGenerales;
+import com.registro.gametracker.models.entity.Juego;
+import com.registro.gametracker.models.entity.User;
 import com.registro.gametracker.repository.JuegoRepository;
+import com.registro.gametracker.service.auth.UsuarioAutenticadoService;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -45,9 +46,9 @@ public class EstadisticasService {
                 .map(Juego::getPuntaje)
                 .filter(Objects::nonNull)
                 .collect(Collectors.groupingBy(p -> p, Collectors.counting()))
-                .entrySet().stream()
-                .max(Map.Entry.comparingByValue())
-                .map(Map.Entry::getKey)
+                .entrySet().stream() // Agrupa en (puntaje, cantidad)
+                .max(Map.Entry.comparingByValue()) // Busca el que mas aparece
+                .map(Map.Entry::getKey) // Lo devuelve
                 .orElse("N/A");
 
         String plataformaPopular = juegos.stream()
@@ -75,6 +76,7 @@ public class EstadisticasService {
                 .orElse(0);
 
         float porcentajeTerminado = total == 0 ? 0 : Math.round((completados * 1000f) / total) / 10f;
+
         int promedioHoras = total == 0 ? 0 : horasTotales / total;
 
         EstadisticasGenerales estadisticas = new EstadisticasGenerales();

@@ -9,6 +9,7 @@ import { jwtDecode} from 'jwt-decode';
 })
 
 export class AuthService {
+
   private LOGIN_URL = 'http://localhost:8080/api/auth/authenticate';
   private REGISTER_URL = 'http://localhost:8080/api/auth/register';
 

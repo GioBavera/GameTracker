@@ -30,7 +30,7 @@ Aplicación FullStack de visualizacion y gestion de una coleccion de juegos de c
 2. Ejecuta:
 
 ```bash
-  docker compose up -d
+docker compose up -d
 ```
 
 Esto levantará el contenedor PostgreSQL con la base y los datos iniciales.
@@ -38,7 +38,7 @@ Esto levantará el contenedor PostgreSQL con la base y los datos iniciales.
 Luego ejecuta la aplicación Spring Boot:
 
 ```bash
-  mvn spring-boot:run
+mvn spring-boot:run
 ```
 
 ### Frontend

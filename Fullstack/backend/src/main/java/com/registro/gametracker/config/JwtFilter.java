@@ -1,6 +1,6 @@
 package com.registro.gametracker.config;
 
-import com.registro.gametracker.service.JwtService;
+import com.registro.gametracker.service.auth.JwtService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

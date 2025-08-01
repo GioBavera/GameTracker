@@ -23,7 +23,6 @@ export default class LoginComponent {
         this.router.navigate(['/home']); // Redirige despues del login exitoso
       },
       error: (err) => {
-        //console.error('Login failed', err);
         alert('Correo o contraseña incorrectos.');
       }
     });

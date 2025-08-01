@@ -1,4 +1,4 @@
-package com.registro.gametracker.models;
+package com.registro.gametracker.models.dto.juego;
 
 public class EstadisticasJuego {
     public int totalJuegos;

@@ -17,6 +17,9 @@ export class Header {
 
   showLogout = true;
 
+  // Escucha los eventos de navegacion para mostrar u ocultar la opción de logout.
+  // Oculta la opcion 'logout' cuando se registra o inicia sesion.
+  // Muestra la opcion 'logout' en todas las demas rutas.
   constructor(private router: Router, private authService : AuthService) {
     this.router.events.pipe(
       filter(event => event instanceof NavigationEnd)
@@ -26,14 +29,17 @@ export class Header {
     });
   }
   
+  // En base a lo que se selecciones en la barra (HTML), se redirige a la ruta correspondiente.
   navigate(path: string): void {
     this.router.navigate([path]);
   }
 
+  // Para saber si la ruta actual es la misma que la ruta proporcionada.
   isActive(path: string): boolean {
     return this.router.url === path;
   }
 
+  // Cierra la sesion del usuario.
   logout(): void {
     this.authService.logout();
   }

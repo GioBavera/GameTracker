@@ -1,12 +1,12 @@
-package com.registro.gametracker.models;
+package com.registro.gametracker.models.dto.juego;
 
 import java.util.List;
 
-public class GraficoPlataformas {
+public class Grafico {
     private List<String> labels;
     private List<Long> data;
 
-    public GraficoPlataformas(List<String> labels, List<Long> data) {
+    public Grafico(List<String> labels, List<Long> data) {
         this.labels = labels;
         this.data = data;
     }

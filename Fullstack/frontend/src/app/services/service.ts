@@ -18,10 +18,6 @@ export class Service {
     return this.http.get<Juego[]>('http://localhost:8080/api/juegos');
   }
 
-  getEstadisticasPorGenero(genero: string): Observable<stasGenero> {
-    return this.http.get<stasGenero>(`http://localhost:8080/api/juegos/stats/genero/${genero}`);
-  }
-
   addJuego(juego: any) {
     return this.http.post<Juego>('http://localhost:8080/api/juegos/adicionar', juego);
   }
@@ -35,19 +31,23 @@ export class Service {
   }
 
   // Devuelve las estadisticas de /home
-  getGameStats(): Observable<estadisticasGenerales> {
+  getEstadisticas(): Observable<estadisticasGenerales> {
     return this.http.get<estadisticasGenerales>('http://localhost:8080/api/estadisticas/generales');
   }
 
   // Devuelve valores para los graficos de /home
-  getChartDataPorCampo(campo: string): Observable<Grafico> {
+  getGrafico(campo: string): Observable<Grafico> {
     return this.http.get<Grafico>(`http://localhost:8080/api/graficos/${campo}`);
   }
 
+  // Devuelve las estadisticas por genero
+  getEstadisticasPorGenero(genero: string): Observable<stasGenero> {
+    return this.http.get<stasGenero>(`http://localhost:8080/api/juegos/stats/genero/${genero}`);
+  }
+
   // Devuelve valores para los graficos de /genre
-  getChartDataPorCampoYGenero(campo: string, genero: string): Observable<Grafico> {
-    const url = `http://localhost:8080/api/graficos/${campo}?genero=${encodeURIComponent(genero)}`;
-    return this.http.get<Grafico>(url);
+  getGraficoPorGenero(campo: string, genero: string): Observable<Grafico> {
+    return this.http.get<Grafico>(`http://localhost:8080/api/graficos/${campo}?genero=${encodeURIComponent(genero)}`);
   }
   
 }

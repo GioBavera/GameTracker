@@ -1,6 +1,6 @@
-package com.registro.gametracker.service;
+package com.registro.gametracker.service.auth;
 
-import com.registro.gametracker.models.User;
+import com.registro.gametracker.models.entity.User;
 import com.registro.gametracker.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;

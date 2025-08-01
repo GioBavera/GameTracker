@@ -1,12 +1,12 @@
 package com.registro.gametracker.controller;
 
-import com.registro.gametracker.models.EstadisticasGenerales;
+import com.registro.gametracker.models.dto.juego.EstadisticasGenerales;
 import com.registro.gametracker.service.EstadisticasService;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/estadisticas")
-@CrossOrigin(origins = "*") // o limita a tu frontend (ej: http://localhost:4200)
+@CrossOrigin(origins = "*")
 public class EstadisticasController {
 
     private final EstadisticasService estadisticasService;

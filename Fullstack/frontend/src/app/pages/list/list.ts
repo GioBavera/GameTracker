@@ -16,6 +16,9 @@ import { LucideAngularModule } from 'lucide-angular';
 export class List implements OnInit {
   games: Juego[] = [];
   filteredGames: Juego[] = [];
+  platforms: string[] = [];
+  genres: string[] = [];
+
   searchTerm: string = '';
   selectedPlatform: string = 'Todas las plataformas';
   selectedGenre: string = 'Todos los géneros';
@@ -37,9 +40,6 @@ export class List implements OnInit {
     horas: '',
     genero: ''
   };
-  
-  platforms: string[] = [];
-  genres: string[] = [];
 
   constructor(private gameService: Service, private cdr: ChangeDetectorRef) {}
 
@@ -52,10 +52,8 @@ export class List implements OnInit {
       next: (data) => {
         this.games = data;
         this.filteredGames = [...this.games];
-
         this.platforms = ['Todas las plataformas', ...this.getUniqueValues('plataforma')];
         this.genres = ['Todos los géneros', ...this.getUniqueValues('genero')];
-
         this.applyFilters();
       },
       error: (err) => {
@@ -101,7 +99,7 @@ export class List implements OnInit {
       return matchesSearch && matchesPlatform && matchesGenre && matchesStatus;
     });
 
-    this.cdr.detectChanges(); // Actualiza la vista obligatoriamente
+    this.cdr.detectChanges();
   }
 
   clearFilters(): void {
@@ -126,55 +124,56 @@ export class List implements OnInit {
 
 //------------------- CRUD
   onSubmitGame(): void {
-  if (!this.isValidGame()) return;
+    if (!this.isValidGame()) return;
 
-  const juegoBase = {
-    nombre: String(this.newGame.nombre).trim(),
-    plataforma: String(this.newGame.plataforma).trim(),
-    anno: Number(this.newGame.anno),
-    puntaje: String(this.newGame.puntaje).trim(),
-    completado: this.newGame.completado ? 'SI' : 'NO',
-    horas: Number(this.newGame.horas),
-    genero: this.newGame.genero
-  };
-
-  if (this.editingGame) {
-    // Modo Edición
-    const juegoActualizado = {
-      ...juegoBase,
-      id: this.editingGame.id
+    const juegoBase = {
+      nombre: String(this.newGame.nombre).trim(),
+      plataforma: String(this.newGame.plataforma).trim(),
+      anno: Number(this.newGame.anno),
+      puntaje: String(this.newGame.puntaje).trim(),
+      completado: this.newGame.completado ? 'SI' : 'NO',
+      horas: Number(this.newGame.horas),
+      genero: this.newGame.genero
     };
 
-    this.gameService.updateJuego(juegoActualizado).subscribe({
-      next: updated => {
-        const index = this.games.findIndex(g => g.id === updated.id);
-        if (index !== -1) this.games[index] = updated;
+    if (this.editingGame) {
+      // Modo Edición
+      const juegoActualizado = {
+        ...juegoBase,   // Agrega los campos del juego base
+        id: this.editingGame.id // Asegúrate de que el ID este presente
+      };
 
-        this.applyFilters();
-        this.resetForm();
-        this.showAddForm = false;
-        this.cdr.detectChanges();
-        this.editingGame = null;
-      },
-      error: err => console.error('Error al editar juego:', err)
-    });
-  } else {
-    // Modo Agregar
-    this.gameService.addJuego(juegoBase).subscribe({
-      next: added => {
-        this.games.push(added);
-        this.applyFilters();
-        this.resetForm();
-        this.showAddForm = false;
-        this.cdr.detectChanges();
+      // Se envia el juegoe editado al backend y se actualiza la lista.
+      this.gameService.updateJuego(juegoActualizado).subscribe({
+        next: updated => {
+          const index = this.games.findIndex(g => g.id === updated.id);
+          if (index !== -1) this.games[index] = updated;
 
-      },
-      error: err => console.error('Error al agregar juego:', err)
-    });
+          this.applyFilters();
+          this.resetForm();
+          this.showAddForm = false;
+          this.cdr.detectChanges();
+          this.editingGame = null;
+        },
+        error: err => console.error('Error al editar juego:', err)
+      });
+    } else {
+      // Caso contrario, se agrega un nuevo juego.
+      this.gameService.addJuego(juegoBase).subscribe({
+        next: added => {
+          this.games.push(added);
+          this.applyFilters();
+          this.resetForm();
+          this.showAddForm = false;
+          this.cdr.detectChanges();
+        },
+
+        error: err => console.error('Error al agregar juego:', err)
+      });
+    }
   }
-}
 
-
+  // Validacion del formulario. 
   isValidGame(): boolean {
     return this.newGame.nombre.trim() !== '' &&
           this.plataformasValidas.includes(this.newGame.plataforma) &&
@@ -195,6 +194,7 @@ export class List implements OnInit {
       horas: '',
       genero: ''
     };
+
     this.editingGame = null;
   }
 
@@ -221,15 +221,15 @@ export class List implements OnInit {
   onDeleteGame(game: Juego): void {
     if (!confirm(`Estas seguro de que queres borrar "${game.nombre}"?`)) return;
     
+    // Se envia el juego a borrar al backend y se actualiza la lista.
     this.gameService.deleteJuego(game.id).subscribe({
       next: () => {
         this.games = this.games.filter(g => g.id !== game.id);
         this.loadFilterOptions();
         this.applyFilters();
-        this.cdr.detectChanges(); // --- Revisar, no funciona
+        this.cdr.detectChanges();
       },
       error: err => console.error('Error al borrar juego:', err)
     });
   }
-
 }

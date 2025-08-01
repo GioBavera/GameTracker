@@ -1,4 +1,4 @@
-package com.registro.gametracker.service;
+package com.registro.gametracker.service.auth;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;

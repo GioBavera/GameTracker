@@ -1,4 +1,4 @@
-package com.registro.gametracker.models;
+package com.registro.gametracker.models.dto.auth;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,8 +9,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class RegisterRequest {
-    private String firstName;
+public class AuthenticationRequest {
     private String email;
     private String password;
 }

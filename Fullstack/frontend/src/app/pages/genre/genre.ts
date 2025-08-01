@@ -14,7 +14,9 @@ Chart.register(...registerables);
   templateUrl: './genre.html',
   styleUrls: ['./genre.scss']
 })
+
 export class Genre implements OnInit {
+  
   private allGames: Juego[] = [];
   availableGenres: string[] = [];
   availablePlatforms: string[] = [];
@@ -35,13 +37,12 @@ export class Genre implements OnInit {
     promedioHorasPorJuego: 0
   };
 
-  constructor(private service: Service, private cdr: ChangeDetectorRef) {}
+  constructor(private gameService: Service, private cdr: ChangeDetectorRef) {}
 
   ngOnInit(): void {
-    this.service.getJuegos().subscribe({
+    this.gameService.getJuegos().subscribe({
       next: juegos => {
         this.allGames = juegos;
-
         this.availableGenres = [...new Set(juegos.map(j => (j as any).genero || 'Desconocido'))];
         this.availablePlatforms = [...new Set(juegos.map(j => j.plataforma))];
 
@@ -68,8 +69,7 @@ export class Genre implements OnInit {
     return new Promise((resolve, reject) => {
       this.genreGames = juegos.filter(j => (j as any).genero === this.selectedGenre);
       this.cdr.detectChanges();
-
-      this.service.getEstadisticasPorGenero(this.selectedGenre).subscribe({
+      this.gameService.getEstadisticasPorGenero(this.selectedGenre).subscribe({
         next: stats => {
           this.genreStats = stats;
           this.cdr.detectChanges();
@@ -85,7 +85,7 @@ export class Genre implements OnInit {
 
   //--------------- Funciones para cargar graficos 
   cargarGraficoBarras(campo: string, canvasId: string, colores: string[]): void {
-    this.service.getChartDataPorCampoYGenero(campo, this.selectedGenre).subscribe(chartData => {
+    this.gameService.getGraficoPorGenero(campo, this.selectedGenre).subscribe(chartData => {
       if (typeof document === 'undefined') return;
       const ctx = document.getElementById(canvasId) as HTMLCanvasElement;
       if (!ctx) return;
@@ -119,4 +119,5 @@ export class Genre implements OnInit {
       });
     });
   }
+  
 }

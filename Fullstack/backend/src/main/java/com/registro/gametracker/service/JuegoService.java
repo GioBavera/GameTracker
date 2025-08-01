@@ -1,10 +1,11 @@
 package com.registro.gametracker.service;
 
-import com.registro.gametracker.models.EstadisticasJuego;
-import com.registro.gametracker.models.GraficoPlataformas;
-import com.registro.gametracker.models.Juego;
-import com.registro.gametracker.models.User;
+import com.registro.gametracker.models.dto.juego.EstadisticasJuego;
+import com.registro.gametracker.models.dto.juego.Grafico;
+import com.registro.gametracker.models.entity.Juego;
+import com.registro.gametracker.models.entity.User;
 import com.registro.gametracker.repository.JuegoRepository;
+import com.registro.gametracker.service.auth.UsuarioAutenticadoService;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import org.springframework.stereotype.Service;
@@ -27,28 +28,29 @@ public class JuegoService {
         this.usuarioAutenticadoService = usuarioAutenticadoService;
     }
 
-    public List<Juego> obtenerDelUsuarioActual() {
+    // Cada funcion trabaja con su respectivo usuario (...porUsuario)
+    public List<Juego> listarJuegos() {
         User user = usuarioAutenticadoService.getUsuarioActual();
         return juegoRepository.findByUser(user);
     }
 
-    public Optional<Juego> obtenerPorIdDelUsuario(Long id) {
+    public Optional<Juego> obtenerJuego(Long id) {
         User user = usuarioAutenticadoService.getUsuarioActual();
         return juegoRepository.findByIdAndUser(id, user);
     }
 
-    public Juego guardarParaUsuario(Juego juego) {
+    public Juego guardar(Juego juego) {
         User user = usuarioAutenticadoService.getUsuarioActual();
         juego.setUser(user);
         return juegoRepository.save(juego);
     }
 
-    public void eliminarSiEsDelUsuario(Long id) throws AccessDeniedException {
+    public void eliminar(Long id) throws AccessDeniedException {
         User user = usuarioAutenticadoService.getUsuarioActual();
         Juego juego = juegoRepository.findById(id).orElseThrow();
 
         if (!juego.getUser().equals(user)) {
-            throw new AccessDeniedException("No puedes eliminar este juego.");
+            throw new AccessDeniedException("No podes eliminar este juego.");
         }
 
         juegoRepository.delete(juego);
@@ -61,6 +63,7 @@ public class JuegoService {
                 .toList();
 
         EstadisticasJuego stats = new EstadisticasJuego();
+
         stats.totalJuegos = juegos.size();
 
         stats.juegosCompletados = (int) juegos.stream()
@@ -109,7 +112,7 @@ public class JuegoService {
         return stats;
     }
 
-    public GraficoPlataformas obtenerChartDataAgrupadoPor(String campo) {
+    public Grafico obtenerChartDataAgrupadoPor(String campo) {
         User user = usuarioAutenticadoService.getUsuarioActual();
         List<Juego> juegos = juegoRepository.findByUser(user);
 
@@ -127,10 +130,10 @@ public class JuegoService {
         List<String> labels = new ArrayList<>(agrupado.keySet());
         List<Long> data = labels.stream().map(agrupado::get).toList();
 
-        return new GraficoPlataformas(labels, data);
+        return new Grafico(labels, data);
     }
 
-    public GraficoPlataformas obtenerChartDataPorCampoYGenero(String campoAgrupacion, String generoFiltro) {
+    public Grafico obtenerChartDataPorCampoYGenero(String campoAgrupacion, String generoFiltro) {
         User user = usuarioAutenticadoService.getUsuarioActual();
         List<Juego> juegos = juegoRepository.findByUser(user).stream()
                 .filter(j -> generoFiltro.equalsIgnoreCase(j.getGenero()))
@@ -148,6 +151,6 @@ public class JuegoService {
         List<String> labels = new ArrayList<>(agrupado.keySet());
         List<Long> data = labels.stream().map(agrupado::get).toList();
 
-        return new GraficoPlataformas(labels, data);
+        return new Grafico(labels, data);
     }
 }

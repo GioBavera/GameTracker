@@ -8,6 +8,7 @@ import org.springframework.web.filter.CorsFilter;
 
 import java.util.List;
 
+// Configuracion para que se acepten pedidos desde el front.
 @Configuration
 public class CorsConfig {
 

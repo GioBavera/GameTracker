@@ -1,9 +1,10 @@
-package com.registro.gametracker.service;
+package com.registro.gametracker.service.auth;
 
-import com.registro.gametracker.models.*;
+import com.registro.gametracker.models.dto.auth.AuthResponse;
+import com.registro.gametracker.models.dto.auth.AuthenticationRequest;
+import com.registro.gametracker.models.dto.auth.RegisterRequest;
+import com.registro.gametracker.models.entity.User;
 import com.registro.gametracker.repository.UserRepository;
-import io.jsonwebtoken.Jwt;
-
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -16,9 +17,12 @@ public class AuthServiceImpl implements AuthService{
 
     // Guarda o buscar usuarios en la base de datos
     private final UserRepository userRepository;
+
     private final PasswordEncoder passwordEncoder;
+
     // Servicio que genera tokens JWT
     private final JwtService jwtService;
+
     // Se encarga de autentificar los usuarios
     private final AuthenticationManager authenticationManager;
 

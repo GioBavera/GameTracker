@@ -1,9 +1,9 @@
 package com.registro.gametracker.controller;
 
-import com.registro.gametracker.models.AuthResponse;
-import com.registro.gametracker.models.AuthenticationRequest;
-import com.registro.gametracker.models.RegisterRequest;
-import com.registro.gametracker.service.AuthService;
+import com.registro.gametracker.models.dto.auth.AuthResponse;
+import com.registro.gametracker.models.dto.auth.AuthenticationRequest;
+import com.registro.gametracker.models.dto.auth.RegisterRequest;
+import com.registro.gametracker.service.auth.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

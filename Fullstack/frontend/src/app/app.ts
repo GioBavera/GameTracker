@@ -12,6 +12,7 @@ import { isPlatformBrowser } from '@angular/common';
 })
 
 export class App implements OnInit {
+
   protected title = 'Game Tracker';
 
   constructor( 
@@ -21,10 +22,6 @@ export class App implements OnInit {
   ngOnInit(): void {
     if (isPlatformBrowser(this.platformId)) {
       const auth = this.authService.isAuthenticated();
-      if (auth) {
-        this.authService.autoRefreshToken();
-      }
     }
   }
-
 }

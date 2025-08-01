@@ -15,6 +15,7 @@ Chart.register(...registerables);
   styleUrls: ['./home.scss']
 })
 export class Home implements OnInit, OnDestroy {
+
   stats: estadisticasGenerales = {
     totalJuegos: 0,
     completadosJuegos: 0,
@@ -33,7 +34,7 @@ export class Home implements OnInit, OnDestroy {
   constructor(private gameService: Service, private cdRef: ChangeDetectorRef, private authService : AuthService) {}
 
   ngOnInit(): void {
-    this.gameService.getGameStats().subscribe({
+    this.gameService.getEstadisticas().subscribe({
       next: data => {
         this.username = this.authService.getUsername();
         this.stats = data;
@@ -41,7 +42,7 @@ export class Home implements OnInit, OnDestroy {
         this.cdRef.detectChanges();
         this.intentarCargarGraficos();
       },
-      error: err => console.error('Error al obtener estadísticas generales:', err)
+      error: err => console.error('Error al obtener estadisticas generales:', err)
     });
   }
 
@@ -61,7 +62,7 @@ export class Home implements OnInit, OnDestroy {
   }
 
   private renderChart(campo: string, canvasId: string, tipo: 'bar' | 'pie' | 'polarArea', colores: string[]): void {
-    this.gameService.getChartDataPorCampo(campo).subscribe(chartData => {
+    this.gameService.getGrafico(campo).subscribe(chartData => {
       const ctx = document.getElementById(canvasId) as HTMLCanvasElement;
       if (!ctx) return;
 
